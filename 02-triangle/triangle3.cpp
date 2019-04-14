@@ -8,8 +8,6 @@ const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
 void render(GLFWwindow *window, unsigned int* VAOs);
-void get_rectangle_vao(unsigned int *VAO, unsigned int * VBO, unsigned int *EBO, unsigned int vertex_attrib_index);
-
 const char *vertexShaderSource = "#version 330 core\n"
                                  "layout (location = 0) in vec3 aPos;\n"
                                  "void main()\n"
@@ -38,15 +36,16 @@ int main()
         
         return -1;
     }
-   float firstTriangle[] = {
+   
+     float firstTriangle[] = {
         -0.9f, -0.5f, 0.0f,  // left 
         -0.0f, -0.5f, 0.0f,  // right
-        0.5f, 0.0f, 0.0f
+        -0.45f, 0.5f, 0.0f,  // top 
     };
     float secondTriangle[] = {
         0.0f, -0.5f, 0.0f,  // left
         0.9f, -0.5f, 0.0f,  // right
-        0.5f, 0.0f, 0.0f
+        0.45f, 0.5f, 0.0f   // top 
     };
 
     unsigned int indices[] = {
@@ -95,32 +94,6 @@ int main()
     clean_up(&VAOs[1], &VBOs[1], &EBOs[1]);
     glfwTerminate();
     return 0;
-}
-
-void get_rectangle_vao(unsigned int *VAO, unsigned int * VBO, unsigned int *EBO, unsigned int vertex_attrib_index) {
-    float vertices[] = {
-        0.5f, 0.5f, 0.0f,   // top right
-        0.5f, -0.5f, 0.0f,  // bottom right
-        0.0f, 0.0f, 0.0f
-    };
-
-    unsigned int indices[] = {
-        // note that we start from 0!
-        0, 1, 2
-    };
-
-    glGenVertexArrays(1, VAO);
-    glGenBuffers(1, VBO);
-    glGenBuffers(1, EBO);
-    // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
-    glBindVertexArray(*VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, *VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-    glVertexAttribPointer(vertex_attrib_index, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
 }
 
 
