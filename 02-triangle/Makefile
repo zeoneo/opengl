@@ -14,6 +14,10 @@ all: clean buildlib
 	c++ -I../lib triangle3.cpp -o triangle3.out -L ../lib -lglprak -lglfw
 	sudo ./triangle3.out
 
+4:
+	c++ -I../lib triangle4.cpp -o triangle4.out -L ../lib -lglprak -lglfw
+	sudo ./triangle4.out
+
 buildlib:
 	make -C ../lib
 
