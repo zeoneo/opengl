@@ -1,3 +1,4 @@
+.SILENT:
 all: clean buildlib
 	c++ -I../lib triangle.cpp -L ../lib -lglprak -lglfw
 	sudo ./a.out

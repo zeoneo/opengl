@@ -1,3 +1,4 @@
+.SILENT:
 all:
 	c++ -g -O -c glad.cpp
 	c++ -g -O -c util.cpp
