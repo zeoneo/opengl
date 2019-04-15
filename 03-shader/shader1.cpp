@@ -8,25 +8,6 @@ const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
 void render(GLFWwindow *window, unsigned int* VAOs);
-const char *vertexShaderSource = "#version 330 core\n"
-                                 "layout (location = 0) in vec3 aPos;\n"
-                                 "void main()\n"
-                                 "{\n"
-                                 "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-                                 "}\0";
-const char *fragmentShaderSource = "#version 330 core\n"
-                                   "out vec4 FragColor;\n"
-                                   "void main()\n"
-                                   "{\n"
-                                   "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-                                   "}\n\0";
-
-const char *fragmentShader2Source = "#version 330 core\n"
-    "out vec4 FragColor;\n"
-    "void main()\n"
-    "{\n"
-    "   FragColor = vec4(1.0f, 1.0f, 0.0f, 1.0f);\n"
-    "}\n\0";
 
 int main()
 {
@@ -35,17 +16,8 @@ int main()
         return -1; // some problem in initializing window
     }
 
-    int vertexShader = createShader(GL_VERTEX_SHADER, vertexShaderSource);
-    int fragmentShader = createShader(GL_FRAGMENT_SHADER, fragmentShaderSource);
-    int fragmentShader2 = createShader(GL_FRAGMENT_SHADER, fragmentShader2Source);
-    int shaderProgram1 = create_program(2, vertexShader, fragmentShader);
-    int shaderProgram2 = create_program(2, vertexShader, fragmentShader2);
+    int shader_program = create_program_from_files("vertex1.vs", "fragment1.fs");
 
-    if(vertexShader == -1 || fragmentShader == -1 || shaderProgram1 == -1 || shaderProgram2 == -1) {
-        
-        return -1;
-    }
-   
      float firstTriangle[] = {
         -0.9f, -0.5f, 0.0f,  // left 
         -0.0f, -0.5f, 0.0f,  // right
@@ -97,7 +69,17 @@ int main()
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     
+    glUseProgram(shader_program);    
+    render(window, VAOs);
 
+    clean_up(&VAOs[0], &VBOs[0], &EBOs[0]);
+    clean_up(&VAOs[1], &VBOs[1], &EBOs[1]);
+    glfwTerminate();
+    return 0;
+}
+
+
+void render(GLFWwindow *window, unsigned int* VAOs) {
     while (!glfwWindowShouldClose(window)) {
         // input
         // -----
@@ -108,12 +90,9 @@ int main()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glUseProgram(shaderProgram1);    
         glBindVertexArray(VAOs[0]);
         glDrawArrays(GL_TRIANGLES, 0, 3);
-
         // then we draw the second triangle using the data from the second VAO
-        glUseProgram(shaderProgram2);    
         glBindVertexArray(VAOs[1]);
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
@@ -122,12 +101,4 @@ int main()
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
-
-    clean_up(&VAOs[0], &VBOs[0], &EBOs[0]);
-    clean_up(&VAOs[1], &VBOs[1], &EBOs[1]);
-    glfwTerminate();
-    return 0;
 }
-
-
-

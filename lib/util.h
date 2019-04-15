@@ -15,6 +15,7 @@ void processInput(GLFWwindow *window);
 void clean_up(unsigned int *,unsigned int *,unsigned int *);
 int createShader(GLenum shaderType, const char *shaderSource);
 int create_program(int num_of_shaders, ...);
+int create_program_from_files(const char* vertexPath, const char* fragmentPath);
 
 #ifdef __cplusplus
 }
